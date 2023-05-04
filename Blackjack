@@ -1,0 +1,339 @@
+import random
+
+# Global variables
+french=False
+suits = ('Hearts', 'Diamonds', 'Spades', 'Clubs')
+ranks = ('Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Jack', 'Queen', 'King', 'Ace')
+values = {'Two':2, 'Three':3, 'Four':4, 'Five':5, 'Six':6, 'Seven':7, 'Eight':8, 
+            'Nine':9, 'Ten':10, 'Jack':11, 'Queen':12, 'King':13, 'Ace':14}
+deck=[]
+player_hand=[]
+dealer_hand=[]
+player='Player'
+dealer='Dealer'
+p_phase=True
+pot=0
+gameon=False
+
+class Card:
+
+    def __init__(self,name,rank,suit):
+        self.rank=rank
+        self.suit=suit
+        self.name=name
+    
+    def __str__(self):
+        if french:
+            return ('{} des {}'.format(self.name,self.suit))
+        else:
+            return ('{} of {}'.format(self.name,self.suit))
+
+class Player:
+
+    def __init__(self, balance=1000, stand=False, turn=1, score=0):
+        self.balance=balance
+        self.stand=stand
+        self.turn=turn
+        self.score=score
+
+    def bet(self):
+        global pot
+        while True:
+            try:
+                ans=int(input("You have {} chips. How many do you want to bet on this hand?".format(self.balance)))
+                self.balance=self.balance-int(ans)
+            except:
+                if french:
+                    print("Tapez un nombre inférieur à votre solde de {}.".format(self.balance))
+                    continue
+                else:
+                    print("Enter a number lower than your balance of {}.".format(self.balance))
+                    continue
+            else:
+                pot=pot+ans
+                if french:
+                    print("Vouz avez parie {}!".format(ans))
+                    break
+                else:
+                    print("You bet {}!".format(ans))
+                    break
+        
+    def win(self):
+        global pot
+        self.balance=self.balance+(pot*2)
+        if french:
+            print("Vous avez gagné le main et gagné {} jetons!".format(pot))
+            pot=0
+        else:
+            print("You won the hand and have won {} chips!".format(pot))
+            pot=0
+    
+    def p_stand_or_draw(self):
+        ans=input(query1)
+        while ans!='y'and ans!='n' and ans!='o':
+            ans=input(query1)
+        else:
+            if ans=='y' or ans=='o':
+                self.stand=False
+            else:
+                self.stand=True
+            
+    def d_stand_or_draw(self):
+        if self.score<16:
+            pass
+        else:
+            self.stand=True
+
+    def show_dealer_score(self):
+        if french:
+            print("Le score de croupier est {}.".format(self.score))
+        else:
+            print("The dealer's score is {}.".format(self.score))
+        
+    def show_player_score(self):
+        if french:
+            print("Votre score est {}.".format(self.score))
+        else:
+            print("Your score is {}.".format(self.score))
+
+        
+    def __str__(self):
+        if french:
+            return ("Vous avez {} jetons.".format(self.balance))
+        else:
+            return ("You now have {} chips.".format(self.balance))
+
+player=Player(player)
+dealer=Player(dealer)
+
+def lang_check():
+#Function that permits the user to choose a language.
+    global french
+    ans=input('Type E for English. Ecrivez F pour français.')
+    ans=ans.lower()
+    while ans!='e' and ans!='f':
+        ans=input('Invalid input. Type E for English. Ecrivez F pour français.')
+        ans=ans.lower()
+    else:
+        if ans=='e':
+            return print("English selected.")
+        else:
+            french=True
+            return print('Français a été choisi.')
+    
+    
+    
+        
+lang_check()
+
+if french:
+
+    query1= "Voulez-vous vous lever ou piocher une carte ? Tapez 'o' pour dessiner ou 'n' pour rester."
+    query2="Voulez-vous jouez Blackjack?"
+    query3="Merci d'avoir essayé mon jeu!"
+    query4="Votre main est:"
+    query5="Vous avez tiré un As! Voulez-vous qu'il marque 1 ou 11?"
+    query6="Votre score est {}.".format(player.score)
+    query7="La main du croupier est:"
+    query8="Le score de croupier est {}".format(dealer.score)
+    query9="Souhaitez-vous jouer un autre tour?"
+    query10="Vous avez dépassé 21! Bousiller!"
+    query11="Vous avez exactement 21 et vous avez gagné la manche!"
+    query12="Le croupier a obtenu 21 exactement! Vouz avez perdu!"
+    query13="Le dealer fait faillite ! Vous gagnez!"
+    query14="Tu as perdu. Désolé, mon pote."
+    query15="C'est un match nul!"
+    query16="Vous avez {} jetons. Combien voulez-vous parier sur cette main?".format(player.balance)
+    query17="Veuillez entrer un nombre inférieur à votre nombre de jetons ({}).".format(player.balance)
+else:
+
+    query1="Do you want to stand or draw a card? Type 'y' to draw or 'n' to stand."
+    query2="Do you want to play Blackjack?"
+    query3="Thank you for trying my game!"
+    query4="Your hand is:"
+    query5="You drew an Ace! Do you want it to score 1 or 11?"
+    query6="Your score is {}.".format(player.score)
+    query7="The dealer's hand is:"
+    query8="The dealer's score is {}".format(dealer.score)
+    query9="Would you like to play another round?"
+    query10="You went over 21! Bust!"
+    query11="You got 21 exactly and won the round!"
+    query12="The dealer got 21 exactly! You lose!"
+    query13="The dealer busts! You win!"
+    query14="You lose. Sorry, buddy."
+    query15="It's a draw!"
+    query16="You have {} chips. How many do you want to bet on this hand?".format(player.balance)
+    query17="Please enter a number lower than your number of chips ({}).".format(player.balance)
+    
+
+def start_game():
+    global gameon
+    ans=input(query2)
+    while ans!='y'and ans!='o'and ans!='n':
+        ans=input(query2)
+    else:
+        if ans=='y' or ans=='o':
+            gameon=True
+        else:
+            print(query3)
+
+def first_draw():
+    # Function that creates the deck and draws the cards.
+    global deck
+    global turn
+    turn=1
+    player.stand=False
+    dealer.stand=False
+    for rank in ranks:
+        card=rank
+        for suit in suits:
+            card=Card(rank,values.get(rank),suit)
+            deck.append(card)
+    global player_hand
+    player_hand=[]
+    player_hand.append(random.choice(deck))
+    deck.remove(player_hand[-1])
+    player_hand.append(random.choice(deck))
+    deck.remove(player_hand[-1])
+    global dealer_hand
+    dealer_hand=[]
+    dealer_hand.append(random.choice(deck))
+    deck.remove(dealer_hand[-1])
+    dealer_hand.append(random.choice(deck))
+    deck.remove(dealer_hand[-1])
+
+
+
+def player_draw():
+    # Function for player card draw
+    player_hand.append(random.choice(deck))
+    deck.remove(player_hand[-1])
+
+
+
+def dealer_draw():
+     # Function for player card draws
+    dealer_hand.append(random.choice(deck))
+    deck.remove(dealer_hand[-1])
+
+
+def display_hand():
+    # Function to display both hands
+    player.score=0
+    dealer.score=0
+    if player.turn==1:
+        print(query4)
+        for card in player_hand:
+            player.score=player.score+card.rank
+            print(card)
+
+        print(query7)
+        for card in dealer_hand:
+            dealer.score=dealer.score+card.rank
+            if card!=dealer_hand[-1]:
+                print(card)
+            elif card==dealer_hand[-1] and p_phase==True:
+                pass
+            else:
+                print(card)
+
+    elif p_phase==True:
+        print(query4)
+        for card in player_hand:
+            player.score=player.score+card.rank
+            print(card)
+            if card.name=='Ace':
+                ans='Pika'
+                while int(ans)!=1 and int(ans)!=11:
+                    ans=int(input(query5))
+                else:
+                    player.score=player.score+ans
+        print(query6)
+
+    else:
+        print(query7)
+        for card in dealer_hand:
+            dealer.score=dealer.score+card.rank
+            print(card)
+        print(query8)
+
+def lose():
+    player.show_player_score
+    dealer.show_dealer_score
+    print(query14)
+
+
+def replay():
+    global gameon
+    ans=input(query9)
+    while ans!='y'and ans!='o'and ans!='n':
+        ans=input(query9)
+    else:
+        if ans=='y' or ans=='o':
+            gameon=True
+        else:
+            print(query3)
+            gameon=False
+
+start_game()
+
+player.balance=1000
+
+while gameon:
+    player.bet()
+    first_draw()
+    display_hand()
+    player.show_player_score()
+    player.p_stand_or_draw()
+
+    while player.stand==False:
+        player_draw()
+        display_hand()
+        player.show_player_score()
+        if player.score==21:
+            print(query11)
+            player.win()
+            break
+        elif player.score>21:
+            print(query10)
+            break
+        else:
+            player.p_stand_or_draw()
+    
+    if player.stand==True:
+        while dealer.stand==False:
+            display_hand()
+            player.show_player_score()
+            dealer.show_dealer_score()
+            if dealer.score==21:
+                print(query12)
+                pot=0
+                break
+            elif dealer.score>21:
+                player.win()
+                print(query13)
+                break
+            elif dealer.stand==True:
+                break
+            else:
+                dealer.d_stand_or_draw()
+                if dealer.stand==True:
+                    break
+                else:
+                    dealer_draw()
+                    continue
+
+        if player.score>dealer.score:
+            player.win()
+        elif player.score<dealer.score and player.score<21:
+            pot=0
+            lose()
+        elif player.score==dealer.score:
+            print(query15)
+            player.balance=player.balance+pot
+        else:
+            pass
+        
+    else:
+        print(player)
+        replay()

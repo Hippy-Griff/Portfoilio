@@ -4,14 +4,17 @@ import requests
 import os
 
 # Initial variables
-board_suffix=2.25
-parent_dir="C:\Users\Megaport\Documents\Work Stuff\Forum Scraping Tool"
-new_dir='Theurgy'
+board_suffix=1.25
+# Replace placeholder with the name of the new folder.
+parent_dir="[placeholder]"
+# Replace placeholder with the name of the new folder.
+new_dir='[placeholder]'
+
 path_root=os.path.join(parent_dir,new_dir)
 junk=[':','|',';','!','\n']
 
 def thread_links(url):
-    # This function extracts all Theurgy thread links in a board page. There are a crap-ton.
+    # This function extracts all thread links in a board page. There are a crap-ton.
     topic='topic='
     msg='msg'
     navPages='navPages'
@@ -29,7 +32,7 @@ def thread_links(url):
 
 def extract_posts(url):
     # This function extracts the thread title, writers and post content and writes them all to text files.
-    # Yeah, it's a proper bastard of a function, I know. Don't judge me for liking my functions being big.
+    # Yeah, it's a proper bugger of a function, I know. Don't judge me for liking my functions being big.
         
         counter=0
         orig_suffix=0
@@ -102,7 +105,7 @@ for board in range(2,30):
     try:
         # First, we iterate through each forum board based on the address suffix, starting at 1.0.
         # Adjust the range if more boards are added or removed, or to do specific sections, because to hell with scraping the giant OOC thread.
-        url=(f'https://uss-theurgy.com/forum/index.php?board={board_suffix}')
+        url=(f'https://(placeholder).com/forum/index.php?board={board_suffix}')
         html=requests.get(url)
         soup=BeautifulSoup(html.text,'html.parser')
         p_list=soup.find("ul","pagelinks floatleft")
@@ -127,7 +130,7 @@ for board in range(2,30):
         # Now we get a list of threads per board, appending them page by page.
         counter=25
         while temp_suffix!=max_suffix and len(thread_list)<(max_page*50):
-            temp_url=(f'https://uss-theurgy.com/forum/index.php?board={temp_suffix}')
+            temp_url=(f'https://(placeholder)/forum/index.php?board={temp_suffix}')
             thread_list+=thread_links(temp_url)
             counter+=50
             temp_suffix=str(int(board_suffix))+'.'+str(counter)

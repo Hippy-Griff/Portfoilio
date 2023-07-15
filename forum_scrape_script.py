@@ -5,7 +5,7 @@ import os
 
 # Initial variables
 board_suffix=1.25
-# Replace placeholder with the name of the new folder.
+# Replace placeholder with the current directory.
 parent_dir="[placeholder]"
 # Replace placeholder with the name of the new folder.
 new_dir='[placeholder]'

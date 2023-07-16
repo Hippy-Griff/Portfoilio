@@ -47,7 +47,6 @@ def extract_posts(url):
         title=title.split("(Read")
         file_title=title[0]
         file_title=file_title.strip()
-        file_title=file_title.replace(' ','_')
         file_title=''.join(x for x in file_title if x.isalnum() or x.isspace())
         for crap in junk:
             file_title=file_title.replace(crap,'')
@@ -121,8 +120,7 @@ for board in range(2,30):
         for crap in junk:
             board_title=board_title.replace(crap,' ')
         board_title=board_title.strip()
-        board_title=board_title.replace(' ','_')
-        board_title=''.join(x for x in board_title if x.isalnum() or x=='_')
+        board_title=''.join(x for x in board_title if x.isalnum() or x.isspace())
         path_board=(os.path.join(path_root,board_title))
         os.mkdir(path_board)
         os.chdir(path_board)
